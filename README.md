@@ -11,6 +11,10 @@ This little framework is the latest attempt to create a basic framework to help
 me in the process of building simple 2D games; I don't expect it to grow in to
 something professional or generally useful.
 
+The framework is being developed with python 3.4, if you want to support other
+versions of python you have to do some work by yourself, and please provide
+patches :)
+
 Basic concepts
 --------------
 
