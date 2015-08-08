@@ -1,5 +1,5 @@
 import pyglet
-from bouncing import Bouncing
+from yaff.contrib.mixins import Bouncing
 
 
 class Ball(Bouncing, pyglet.sprite.Sprite):
