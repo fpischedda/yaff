@@ -49,7 +49,6 @@ class Consumer:
         self.on_message(ujson.loads(body))
 
     def on_message(self, msg):
-        print("received message {msg}".format(msg=msg))
         self.message_queue.put(msg)
 
     def close_connection(self):

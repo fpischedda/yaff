@@ -19,13 +19,12 @@ def feeds_worker(message_queue):
         consumer.close_connection()
 
 
-def randomize_ball(boundaries, image, batch, scale):
+def randomize_ball(boundaries, image, batch, msg):
     angle = random.randint(0, 360) * 3.14 / 360
     direction = [math.cos(angle), math.sin(angle)]
-    b = Ball(boundaries, direction, image, batch=batch)
+    b = Ball(msg, boundaries, direction, image, batch=batch)
     b.x = random.randint(30, 600)
     b.y = random.randint(30, 400)
-    b.scale = scale
 
     return b
 
@@ -72,18 +71,21 @@ class GameScene(Scene):
             self.boundaries[2] += 10
             self.boundaries[3] += 10
 
+        if symbol == pyglet.window.key.SPACE:
+            b = self.balls.pop(0)
+            new_balls = b.die()
+            self.balls.extend(new_balls)
+
         return True
 
     def add_balls(self):
 
         while not self.queue.empty():
             msg = self.queue.get()
-            print(msg)
-            scale = len(msg['text']) / 140.0
             self.balls.append(randomize_ball(self.boundaries,
                                              self.image,
                                              self.batch,
-                                             scale))
+                                             msg))
             self.queue.task_done()
 
     def on_update(self, dt):
