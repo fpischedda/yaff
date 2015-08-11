@@ -6,6 +6,8 @@ import threading
 import settings
 from yaff.scene import Scene
 from ball import Ball
+from letter import Letter
+from bitmap_font import BitmapFont
 from consumer import Consumer
 
 
@@ -29,6 +31,31 @@ def randomize_ball(boundaries, image, batch, msg):
     return b
 
 
+def spawn_letters(bitmap_font, text, start_x, start_y, batch, boundaries):
+
+    points = len(text)
+    if points <= 0:
+        return []
+
+    letters = []
+    angle = 0
+    angle_diff = 360 / points
+    for letter in text:
+        letter_image = bitmap_font.get_image(letter)
+        direction = [math.cos(angle), math.sin(angle)]
+        l = Letter(3.0, boundaries,
+                    direction,
+                    letter_image,
+                    batch=batch)
+        l.x = start_x
+        l.y = start_y
+
+        letters.append(l)
+        angle += angle_diff
+
+    return letters
+
+
 class GameScene(Scene):
 
     def __init__(self, *args, **kwargs):
@@ -41,8 +68,10 @@ class GameScene(Scene):
 
         self.boundaries = [0, 0, 640, 480]
 
+        self.bitmap_font = BitmapFont('res/images/fonts/font.png', 5, 10)
         self.batch = pyglet.graphics.Batch()
         self.balls = []
+        self.letters = []
 
         self.background = pyglet.resource.image('res/images/bg/bg.jpg')
 
@@ -73,8 +102,10 @@ class GameScene(Scene):
 
         if symbol == pyglet.window.key.SPACE:
             b = self.balls.pop(0)
-            new_balls = b.die()
-            self.balls.extend(new_balls)
+            new_letters = spawn_letters(self.bitmap_font, b.die(),
+                                        b.x, b.y, self.batch,
+                                        self.boundaries)
+            self.letters.extend(new_letters)
 
         return True
 
@@ -92,6 +123,10 @@ class GameScene(Scene):
         self.add_balls()
         for b in self.balls:
             b.on_update(dt)
+
+        to_remove = [l for l in self.letters if l.on_update(dt) is False]
+        for r in to_remove:
+            self.letters.remove(r)
 
     def on_draw(self, window):
 

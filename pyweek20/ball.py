@@ -1,45 +1,23 @@
 import math
 import pyglet
 from yaff.contrib.mixins import Bouncing
+from letter import Letter
 
 
 class Ball(Bouncing, pyglet.sprite.Sprite):
 
     def __init__(self, tweet, *args, **kwargs):
 
-        self.tweet = tweet
+        self.text = tweet['text']
         super(Ball, self).__init__(*args, **kwargs)
 
-        self.scale = max(14, len(tweet['text'])) / 140.0
+        self.scale = max(14, len(self.text)) / 140.0
         self.speed = 80 + min(tweet['retweet_count'] * 2, 50)
-        self.respawn = min(tweet['friends_count'] // 100, 20)
 
     def die(self):
-        if self.respawn <= 0:
-            return []
-
-        respawn_opts = {'text': 'R',
-                        'friends_count': 0,
-                        'retweet_count': 0
-                        }
-        balls = []
-        angle = 0
-        angle_diff = 360 / self.respawn
-        for i in range(self.respawn):
-            direction = [math.cos(angle), math.sin(angle)]
-            b = Ball(respawn_opts,
-                     self.boundaries,
-                     direction,
-                     self.image,
-                     batch=self.batch)
-            b.x = self.x
-            b.y = self.y
-
-            balls.append(b)
-            angle += angle_diff
 
         self.delete()
-        return balls
+        return self.text
 
     def on_update(self, dt):
 
@@ -50,6 +28,8 @@ class Ball(Bouncing, pyglet.sprite.Sprite):
 
         self.x -= diff[0]
         self.y -= diff[1]
+
+        return True
 
     def bounding_box(self):
 
