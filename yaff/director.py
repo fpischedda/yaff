@@ -48,10 +48,17 @@ class Director:
 
     def on_key_press(self, symbol, modifier):
         current_scene = self.current_scene()
-        if current_scene is not None:
+        if current_scene is not None and hasattr(current_scene,
+                                                 'on_key_press'):
             current_scene.on_key_press(symbol, modifier)
+
+    def on_key_release(self, symbol, modifier):
+        current_scene = self.current_scene()
+        if current_scene is not None and hasattr(current_scene,
+                                                 'on_key_release'):
+            current_scene.on_key_release(symbol, modifier)
 
     def on_draw(self):
         current_scene = self.current_scene()
-        if current_scene is not None:
+        if current_scene is not None and hasattr(current_scene, 'on_draw'):
             current_scene.on_draw(self.window)

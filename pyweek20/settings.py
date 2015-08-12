@@ -8,3 +8,4 @@ load_dotenv(dotenv_path)
 
 
 BROKER_URL = os.environ.get("BROKER_URL")
+GRAVITY = 60

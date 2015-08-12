@@ -6,8 +6,9 @@ class Letter(Bouncing, pyglet.sprite.Sprite):
 
     def __init__(self, life_milliseconds, *args, **kwargs):
         self.life_milliseconds = life_milliseconds
-        self.speed = 100
+        self.speed = 110
         super(Letter, self).__init__(*args, **kwargs)
+        self.scale = 2
 
     def die(self):
 
