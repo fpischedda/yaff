@@ -8,4 +8,6 @@ load_dotenv(dotenv_path)
 
 
 BROKER_URL = os.environ.get("BROKER_URL")
-GRAVITY = 60
+TWEET_START_SPEED = 500
+TWEET_ELASTICITY = 0.9
+GRAVITY = 300
