@@ -20,9 +20,9 @@ class Director:
         except IndexError:
             return None
 
-    def prepare_next_scene(self, scene_class):
+    def prepare_next_scene(self, scene_class, *args, **kwargs):
         if scene_class is not None:
-            self.replace_scene(scene_class())
+            self.replace_scene(scene_class(*args, **kwargs))
         else:
             self.send_close_window_event()
 

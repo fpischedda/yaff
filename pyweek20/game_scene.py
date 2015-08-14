@@ -10,6 +10,7 @@ from player import Player
 from explosion import Explosion
 from bitmap_font import BitmapFont
 from consumer import Consumer
+from gameover_scene import GameOverScene
 from utils import load_grid_animation
 from utils import spawn_letters
 
@@ -165,6 +166,8 @@ class GameScene(Scene):
                 self.letters.extend(new_letters)
                 Explosion(c.x, c.y, c.scale,
                           self.explosion_animation, batch=self.batch)
+        elif len(collisions) > 0:
+            self.director.prepare_next_scene(GameOverScene, self.new_points)
 
     def check_letter_collisions(self):
         bbox = self.player.bounding_box()
