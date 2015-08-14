@@ -15,12 +15,21 @@ class GameOverScene(Scene):
                                               y=240,
                                               anchor_x='center',
                                               anchor_y='center')
+        self.continue_label = pyglet.text.Label(
+            "Press SPACE to continue",
+            x=320,
+            y=200,
+            anchor_x='center',
+            anchor_y='center')
+
 
     def on_key_press(self, symbol, modifier):
         from game_scene import GameScene
-        self.director.prepare_next_scene(SplashScene,
-                                         next_scene_class=GameScene)
+        if symbol == pyglet.window.key.SPACE:
+            self.director.prepare_next_scene(SplashScene,
+                                             next_scene_class=GameScene)
 
     def on_draw(self, window):
         super(GameOverScene, self).on_draw(window)
         self.points_label.draw()
+        self.continue_label.draw()
