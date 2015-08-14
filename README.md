@@ -4,7 +4,7 @@ YAFF
 Yet Another Failed Framework
 ----------------------------
 
-From tome to time I come back to game development mainly to create simple
+From time to time I come back to game development mainly to create simple
 experimental games and sometimes to partecipate to some contest such as PyWeek.
 
 This little framework is the latest attempt to create a basic framework to help
