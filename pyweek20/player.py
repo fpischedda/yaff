@@ -80,6 +80,12 @@ class Player(pyglet.sprite.Sprite):
         self.x += self.speed * self.direction[0] * dt
         self.y += self.speed * self.direction[1] * dt
 
+        if self.x < 0:
+            self.x = 0
+
+        if self.x > 640 - self.width:
+            self.x = 640 - self.width
+
         if self.jumping:
             self.direction[1] -= settings.GRAVITY / 4 * dt
 

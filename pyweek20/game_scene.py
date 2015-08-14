@@ -93,7 +93,7 @@ class GameScene(Scene):
                 'res/images/sprites/bird-left.png',
                 1, 7),
         }
-        self.background = pyglet.resource.image('res/images/bg/bg.jpg')
+        self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
 
         self.explosion_animation = load_grid_animation(
             'res/images/sprites/explosion.png', 1, 6
@@ -130,9 +130,6 @@ class GameScene(Scene):
 
         if symbol == pyglet.window.key.W:
             self.player.set_key_pressed(Player.DIRECTION_UP)
-
-        if symbol == pyglet.window.key.SPACE:
-            b = self.tweets.pop(0)
 
         return True
 
@@ -177,5 +174,9 @@ class GameScene(Scene):
 
         super(GameScene, self).on_draw(window)
 
-        self.background.blit(0, 0)
+        bg_x = -self.player.x
+        bg_y = -self.player.y
+        if bg_y < - 240:
+            bg_y = -240
+        self.background.blit(bg_x, bg_y)
         self.batch.draw()
