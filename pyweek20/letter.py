@@ -6,7 +6,7 @@ class Letter(Bouncing, pyglet.sprite.Sprite):
 
     def __init__(self, life_milliseconds, *args, **kwargs):
         self.life_milliseconds = life_milliseconds
-        self.speed = 110
+        self.speed = 120
         super(Letter, self).__init__(*args, **kwargs)
         self.scale = 2
 
@@ -35,3 +35,12 @@ class Letter(Bouncing, pyglet.sprite.Sprite):
 
         return (self.x, self.y,
                 self.x + self.width, self.y + self.height)
+
+    def collide(self, bbox):
+        b = self.bounding_box()
+
+        if b[0] <= bbox[2] and b[1] <= bbox[3] \
+                and b[2] >= bbox[0] and b[3] >= bbox[1]:
+            return True
+
+        return False

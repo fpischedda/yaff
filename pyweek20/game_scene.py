@@ -60,6 +60,15 @@ class GameScene(Scene):
         self.tweets = []
         self.letters = []
 
+        self.points = 0
+        self.new_points = 0
+        self.points_label = pyglet.text.Label('0',
+                                               font_name='Times New Roman',
+                                               font_size=36,
+                                               x=630, y=460,
+                                               anchor_x='right',
+                                               anchor_y='top')
+
         player_animations = {
             'idle-right': load_grid_animation(
                 'res/images/sprites/idle-right.png',
@@ -142,7 +151,7 @@ class GameScene(Scene):
                                                msg))
             self.queue.task_done()
 
-    def check_collisions(self):
+    def check_tweet_collisions(self):
         bbox = self.player.bounding_box()
 
         collisions = [t for t in self.tweets if t.collide(bbox)]
@@ -157,18 +166,37 @@ class GameScene(Scene):
                 Explosion(c.x, c.y, c.scale,
                           self.explosion_animation, batch=self.batch)
 
+    def check_letter_collisions(self):
+        bbox = self.player.bounding_box()
+
+        collisions = [l for l in self.letters if l.collide(bbox)]
+
+        for c in collisions:
+            self.letters.remove(c)
+            c.die()
+            self.new_points += settings.LETTER_POINTS
+
+    def update_points_label(self):
+
+        if self.points < self.new_points:
+            self.points += 10
+            self.points_label.text = str(self.points)
+
     def on_update(self, dt):
         self.add_tweets()
         for b in self.tweets:
             b.on_update(dt)
 
-        self.check_collisions()
+        self.check_letter_collisions()
+        self.check_tweet_collisions()
 
         to_remove = [l for l in self.letters if l.on_update(dt) is False]
         for r in to_remove:
             self.letters.remove(r)
 
         self.player.on_update(dt)
+
+        self.update_points_label()
 
     def on_draw(self, window):
 
@@ -180,3 +208,4 @@ class GameScene(Scene):
             bg_y = -240
         self.background.blit(bg_x, bg_y)
         self.batch.draw()
+        self.points_label.draw()
