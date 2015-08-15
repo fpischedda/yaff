@@ -8,6 +8,10 @@ class Player(pyglet.sprite.Sprite):
     DIRECTION_RIGHT = 1
     DIRECTION_UP = 2
 
+    STATUS_ALIVE = 0
+    STATUS_DYING = 1
+    STATUS_DEAD = 2
+
     def __init__(self, start_x, start_y, animations, *args, **kwargs):
 
         super(Player, self).__init__(*args, **kwargs)
@@ -21,6 +25,14 @@ class Player(pyglet.sprite.Sprite):
         self.speed = 150
         self.jumping = False
 
+        self.status = self.STATUS_ALIVE
+        self.sounds = {
+            'jump': pyglet.media.load('res/sfx/player_jump.wav',
+                                      streaming=False),
+            'die': pyglet.media.load('res/sfx/player_died.wav',
+                                      streaming=False),
+        }
+
     def set_image(self, image):
         self.image = image
 
@@ -28,6 +40,9 @@ class Player(pyglet.sprite.Sprite):
         self.image = self.animations[animation_name]
 
     def set_key_pressed(self, direction_key):
+
+        if self.status != self.STATUS_ALIVE:
+            return
 
         key_mask = 1 << direction_key
         if self.key_pressed & key_mask:
@@ -58,7 +73,12 @@ class Player(pyglet.sprite.Sprite):
             else:
                 self.set_animation('rolling-right')
 
+            self.sounds['jump'].play()
+
     def set_key_released(self, direction_key):
+
+        if self.status != self.STATUS_ALIVE:
+            return
 
         self.key_pressed &= ~(1 << direction_key)
 
@@ -75,7 +95,25 @@ class Player(pyglet.sprite.Sprite):
 
             self.direction[0] = 0
 
+    def on_animation_end(self):
+        if self.status == self.STATUS_DYING:
+            self.status = self.STATUS_DEAD
+
+    def die(self):
+        self.sounds['die'].play()
+        self.status = self.STATUS_DYING
+        self.direction[0] = 0
+        self.direction[1] = 0
+        self.jumping = False
+        self.set_animation('dying')
+
+    def is_alive(self):
+        return self.status == self.STATUS_ALIVE
+
     def on_update(self, dt):
+
+        if self.status == self.STATUS_DEAD:
+            return False
 
         self.x += self.speed * self.direction[0] * dt
         self.y += self.speed * self.direction[1] * dt

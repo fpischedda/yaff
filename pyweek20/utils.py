@@ -47,8 +47,10 @@ def load_gif_animation(path, tex_bin=None):
     return animation
 
 
-def load_grid_animation(path, rows, cols):
+def load_grid_animation(path, rows, cols, frame_duration=0.1):
 
     img = pyglet.resource.image(path)
     grid = pyglet.image.ImageGrid(img, rows, cols)
-    return pyglet.image.Animation.from_image_sequence(grid, 0.1, True)
+    return pyglet.image.Animation.from_image_sequence(grid,
+                                                      frame_duration,
+                                                      True)

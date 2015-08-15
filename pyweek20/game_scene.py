@@ -89,6 +89,9 @@ class GameScene(Scene):
             'rolling-left': load_grid_animation(
                 'res/images/sprites/rolling-left.png',
                 1, 3),
+            'dying': load_grid_animation(
+                'res/images/sprites/dying.png',
+                1, 9, 0.12),
         }
 
         self.player = Player(320, 0, player_animations,
@@ -108,6 +111,11 @@ class GameScene(Scene):
         self.explosion_animation = load_grid_animation(
             'res/images/sprites/explosion.png', 1, 6
         )
+
+        self.sounds = {
+            'pickup': pyglet.media.load('res/sfx/pickup.wav',
+                                        streaming=False),
+        }
 
         self.start_feeds_thread()
 
@@ -167,7 +175,7 @@ class GameScene(Scene):
                 Explosion(c.x, c.y, c.scale,
                           self.explosion_animation, batch=self.batch)
         elif len(collisions) > 0:
-            self.director.prepare_next_scene(GameOverScene, self.new_points)
+            self.player.die()
 
     def check_letter_collisions(self):
         bbox = self.player.bounding_box()
@@ -178,6 +186,9 @@ class GameScene(Scene):
             self.letters.remove(c)
             c.die()
             self.new_points += settings.LETTER_POINTS
+
+        if len(collisions) > 0:
+            self.sounds['pickup'].play()
 
     def update_points_label(self):
 
@@ -190,14 +201,16 @@ class GameScene(Scene):
         for b in self.tweets:
             b.on_update(dt)
 
-        self.check_letter_collisions()
-        self.check_tweet_collisions()
+        if self.player.is_alive():
+            self.check_letter_collisions()
+            self.check_tweet_collisions()
 
         to_remove = [l for l in self.letters if l.on_update(dt) is False]
         for r in to_remove:
             self.letters.remove(r)
 
-        self.player.on_update(dt)
+        if self.player.on_update(dt) is False:
+            self.director.prepare_next_scene(GameOverScene, self.new_points)
 
         self.update_points_label()
 
