@@ -26,3 +26,7 @@ class Human:
 
         opts = dict(Human.DEFAULT_OPTIONS, **options)
         self.__dict__.update(opts)
+
+    def update(self, dt):
+        for p in self.properties.values():
+            p.decay(dt)
