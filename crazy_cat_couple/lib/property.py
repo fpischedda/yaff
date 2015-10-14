@@ -1,4 +1,3 @@
-
 class BaseProperty:
 
     def __init__(self, name, value, *args, **kwargs):
@@ -6,6 +5,24 @@ class BaseProperty:
 
         self.value = value
         self.name = name
+
+    def __gt__(self, val):
+        return self.value > val
+
+    def __ge__(self, val):
+        return self.value >= val
+
+    def __lt__(self, val):
+        return self.value < val
+
+    def __le__(self, val):
+        return self.value <= val
+
+    def __eq__(self, val):
+        return self.value == val
+
+    def __ne__(self, val):
+        return self.value != val
 
 
 class DecayingPropertyMixin:
@@ -49,13 +66,16 @@ class GainingPropertyMixin:
 
     def gain(self, dt):
         val = getattr(self, self.GAINING_ATTRIBUTE)
-        
+
         new_val = min(val + self.decay_by_sec * dt, self.max_value)
 
         setattr(self, self.GAINING_ATTRIBUTE, new_val)
         return new_val
-        
-class DynamicProperty(BaseProperty, DecayingPropertyMixin, GainingPropertyMixin):
+
+
+class DynamicProperty(BaseProperty,
+                      DecayingPropertyMixin,
+                      GainingPropertyMixin):
 
     def __init__(self, initial_value, *args, **kwargs):
         if 'value' not in kwargs:
