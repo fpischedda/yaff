@@ -1,9 +1,21 @@
+from transitions import Machine
 from property import DynamicProperty
 
 
-class Human:
+class Human(Machine):
 
     def __init__(self, name, sex, age, **options):
+
+        states = ['idle', 'walking', 'eating', 'talking']
+        transitions = [
+            {'trigger': 'rest', 'source': '*', 'dest': 'idle'},
+            {'trigger': 'eat', 'source': '*', 'dest': 'eating'},
+            {'trigger': 'talk', 'source': '*', 'dest': 'talking'}
+        ]
+
+        super(Human, self).__init__(model=self, states=states,
+                                    transitions=transitions,
+                                    initial='idle')
 
         self.name = name
         self.sex = sex
