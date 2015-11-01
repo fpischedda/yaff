@@ -1,0 +1,14 @@
+* Game Logic
+** simple human action
+** interaction with objects
+** save/load game
+
+* Game rendering
+** query game scene to get elements to draw
+** camera handling: free camera, follow game entity
+** UI rendering
+
+* UI/UX
+** click on game elements
+** drag things
+** opeartion on elements

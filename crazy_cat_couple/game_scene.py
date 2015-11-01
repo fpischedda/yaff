@@ -1,7 +1,5 @@
-import settings
 from yaff.scene import Scene
-from gameover_scene import GameOverScene
-from utils import load_grid_animation
+from lib.game import Game
 
 
 class GameScene(Scene):
@@ -10,6 +8,8 @@ class GameScene(Scene):
 
         super(GameScene, self).__init__(*args, **kwargs)
 
+        self.game = Game()
+
     def on_key_release(self, symbol, modifier):
         pass
 
@@ -17,7 +17,7 @@ class GameScene(Scene):
         return True
 
     def on_update(self, dt):
-        pass
+        self.game.update(dt)
 
     def on_draw(self, window):
 
