@@ -5,18 +5,18 @@ class Game:
 
     def __init__(self):
 
-        self.rooms = {
-            'living room': Room(20, 10),
-            'bathroom': Room(10, 10),
-            'bedroom': Room(15, 8)
-        }
+        self.rooms = [
+            Room('living room', 20, 10),
+            Room('bathroom', 10, 10),
+            Room('bedroom', 15, 8)
+        ]
 
-        self.humans = {}
+        self.persons = []
 
     def add_person(self, person):
-        self.persons[person.name] = person
+        self.persons.append(person)
 
     def update(self, dt):
 
-        for r in self.rooms.values():
+        for r in self.rooms:
             r.update(dt)

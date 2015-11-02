@@ -1,5 +1,6 @@
 from yaff.scene import Scene
-from lib.game import Game
+from game import Game
+from room_render import RoomRender
 
 
 class GameScene(Scene):
@@ -9,6 +10,7 @@ class GameScene(Scene):
         super(GameScene, self).__init__(*args, **kwargs)
 
         self.game = Game()
+        self.room_render = RoomRender(self.game.rooms[0])
 
     def on_key_release(self, symbol, modifier):
         pass
@@ -22,3 +24,5 @@ class GameScene(Scene):
     def on_draw(self, window):
 
         super(GameScene, self).on_draw(window)
+
+        self.room_render.render()

@@ -80,9 +80,19 @@ class DynamicProperty(BaseProperty,
     def __init__(self, initial_value, *args, **kwargs):
         if 'value' not in kwargs:
             kwargs['value'] = initial_value
+
+        self.decaying = kwargs.pop('decaying', True)
+
         super(DynamicProperty, self).__init__(*args, **kwargs)
 
         self.initial_value = initial_value
+
+    def update(self, dt, decay=True):
+
+        if self.decaying:
+            return self.decay(dt)
+
+        return self.gain(dt)
 
     def reset(self):
         self.value = self.initial_value
