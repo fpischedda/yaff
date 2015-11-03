@@ -1,4 +1,5 @@
 from lib.room import Room
+from lib.forniture import Forniture
 
 
 class Game:
@@ -10,6 +11,10 @@ class Game:
             Room('bathroom', 10, 10),
             Room('bedroom', 15, 8)
         ]
+
+        forniture = Forniture("window", 50, 50, 0)
+
+        self.rooms[0].add_forniture(forniture, 10, 100)
 
         self.persons = []
 

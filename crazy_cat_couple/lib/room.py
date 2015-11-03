@@ -1,6 +1,15 @@
 from .property import DynamicProperty
 
 
+class ForniturePlacement:
+
+    def __init__(self, forniture, x, y):
+
+        self.forniture = forniture
+        self.x = x
+        self.y = y
+
+
 class Room:
 
     def __init__(self, name, width, height):
@@ -23,10 +32,14 @@ class Room:
 
         self.elements = []
 
+    def add_forniture(self, forniture, x, y):
+
+        self.elements.append(ForniturePlacement(forniture, x, y))
+
     def update(self, dt):
 
         for p in self.properties.values():
             p.update(dt)
 
         for e in self.elements:
-            e.update(dt)
+            e.forniture.update(dt)

@@ -9,6 +9,12 @@ def get_room_wall_image(room):
     return pyglet.resource.image(filename)
 
 
+def get_forniture_image(forniture):
+
+    filename = 'res/forniture/{}.png'.format(forniture.name)
+    return pyglet.resource.image(filename)
+
+
 class RoomRender:
 
     def __init__(self, room):
@@ -26,10 +32,21 @@ class RoomRender:
                                                 batch=self.batch,
                                                 group=self.background_group)
 
+        forniture_placements = []
+        for e in room.elements:
+            elem_img = get_forniture_image(e.forniture)
+            fs = pyglet.sprite.Sprite(elem_img,
+                                      x=e.x, y=e.y,
+                                      batch=self.batch,
+                                      group=self.foreground_group)
+            forniture_placements.append(fs)
+
+        self.forniture_placements = forniture_placements
+
         pyglet.text.Label(room.name,
                           font_name='Times New Roman',
-                          font_size=36,
-                          x=100, y=100,
+                          font_size=16,
+                          x=100, y=350,
                           batch=self.batch, group=self.info_group)
 
     def render(self):

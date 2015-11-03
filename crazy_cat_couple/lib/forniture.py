@@ -1,4 +1,4 @@
-from property import DynamicProperty
+from .property import DynamicProperty
 
 
 class Forniture:
