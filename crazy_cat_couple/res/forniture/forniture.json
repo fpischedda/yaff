@@ -1,0 +1,41 @@
+{
+
+    "definitions": [
+	{
+	    "name": "sink",
+	    "width": 2,
+	    "height": 2,
+	    "initial_cost": 1
+	},
+	{
+	    "name": "chair",
+	    "width": 1,
+	    "height": 2,
+	    "initial_cost": 1
+	},
+	{
+	    "name": "square table",
+	    "width": 5,
+	    "height": 5,
+	    "initial_cost": 1
+	},
+	{
+	    "name": "lamp",
+	    "width": 1,
+	    "height": 1,
+	    "initial_cost": 1
+	},
+	{
+	    "name": "flat tv",
+	    "width": 5,
+	    "height": 3,
+	    "initial_cost": 1
+	},
+	{
+	    "name": "window",
+	    "width": 4,
+	    "height": 4,
+	    "initial_cost": 1
+	}
+    ]
+}
