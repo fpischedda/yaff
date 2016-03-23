@@ -3,3 +3,6 @@ __pycache__
 .ropeproject
 *.pyc
 *.pyd
+build
+dist
+*.egg-info
