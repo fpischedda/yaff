@@ -23,20 +23,23 @@ class BaseSettings(object):
              if k.isupper()}
 
         try:
-            module = os.environ.get(ENV_SETTINGS_MODULE)
+            module = os.environ.get(ENV_SETTINGS_MODULE, None)
         except:
             raise ImproperlyConfiguredError("Please specify a settings module")
 
-        try:
-            sm = importlib.import_module()
-        except ImportError:
-            raise ImproperlyConfiguredError(
-                "Unable to load {} settings module".format(module))
+        if module is not None:
+            try:
+                sm = importlib.import_module(module)
+            except ImportError:
+                raise ImproperlyConfiguredError(
+                    "Unable to load {} settings module".format(module))
 
-        custom = {k: getattr(sm, k) for k in dir(sm) if k.isupper()}
+            custom = {k: getattr(sm, k) for k in dir(sm) if k.isupper()}
 
-        # merge defauls with user's custom settings
-        self._settings = {**g, **custom}
+            # merge defauls with user's custom settings
+            self._settings = {**g, **custom}
+        else:
+            self._settings = g
 
     def __getattr__(self, attr):
 
