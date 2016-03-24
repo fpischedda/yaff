@@ -1,27 +1,14 @@
 import pyglet
-from yaff.conf import settings
 from yaff.scene import Scene
-from yaff.utils import load_grid_animation
 from yaff.contrib.bitmap_font import BitmapFont
+from yaff.animation import load_animation
 from player import Player
 from gameover_scene import GameOverScene
 
 
-def load_animation(animation_data):
-    func = settings.LOADERS[animation_data['loader']]
-
-    params = animation_data['parameters']
-    if isinstance(params, dict):
-        return func(**params)
-    elif isinstance(params, list):
-        return func(*params)
-    else:
-        return func()
-
-
 def load_animations(animations_def):
 
-    return {anim: load_animation
+    return {anim: load_animation(data)
             for anim, data in animations_def.items()}
 
 
@@ -80,34 +67,12 @@ class GameScene(Scene):
                     'cols': 4
                 }
             },
-            'rolling-right': load_grid_animation(
-                'res/images/sprites/rolling-right.png',
-                1, 3),
-            'rolling-left': load_grid_animation(
-                'res/images/sprites/rolling-left.png',
-                1, 3),
-            'dying': load_grid_animation(
-                'res/images/sprites/dying.png',
-                1, 9, 0.12),
         }
 
         self.player = Player(320, 0, player_animations,
                              player_animations['idle-right'],
                              batch=self.batch)
-
-        self.bird_animations = {
-            'bird-right': load_grid_animation(
-                'res/images/sprites/bird-right.png',
-                1, 7),
-            'bird-left': load_grid_animation(
-                'res/images/sprites/bird-left.png',
-                1, 7),
-        }
         self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
-
-        self.explosion_animation = load_grid_animation(
-            'res/images/sprites/explosion.png', 1, 6
-        )
 
         self.sounds = {
             'pickup': pyglet.media.load('res/sfx/pickup.wav',

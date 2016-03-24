@@ -1,7 +1,7 @@
 import pyglet
 
 
-def load_gif_animation(path, tex_bin=None):
+def gif_loader(path, tex_bin=None):
 
     tb = tex_bin or pyglet.image.atlas.TextureBin()
     animation = pyglet.image.load_animation(path)
@@ -10,7 +10,7 @@ def load_gif_animation(path, tex_bin=None):
     return animation
 
 
-def grid_animation(path, rows, cols, frame_duration=0.1):
+def grid_loader(path, rows, cols, frame_duration=0.1):
 
     img = pyglet.resource.image(path)
     grid = pyglet.image.ImageGrid(img, rows, cols)
