@@ -3,15 +3,15 @@ import math
 import pyglet
 import queue
 import threading
-import settings
+from yaff.conf import settings
 from yaff.scene import Scene
+from yaff.animation import load_animation
 from tweet import Tweet
 from player import Player
 from explosion import Explosion
 from bitmap_font import BitmapFont
 from consumer import Consumer
 from gameover_scene import GameOverScene
-from utils import load_grid_animation
 from utils import spawn_letters
 
 
@@ -44,6 +44,12 @@ def randomize_tweet(animations, batch, msg):
     return b
 
 
+def load_animations(animations_def):
+
+    return {anim: load_animation(data)
+            for anim, data in animations_def.items()}
+
+
 class GameScene(Scene):
 
     def __init__(self, *args, **kwargs):
@@ -70,47 +76,66 @@ class GameScene(Scene):
                                                anchor_x='right',
                                                anchor_y='top')
 
-        player_animations = {
-            'idle-right': load_grid_animation(
-                'res/images/sprites/idle-right.png',
-                1, 6),
-            'idle-left': load_grid_animation(
-                'res/images/sprites/idle-left.png',
-                1, 6),
-            'run-right': load_grid_animation(
-                'res/images/sprites/run-right.png',
-                1, 4),
-            'run-left': load_grid_animation(
-                'res/images/sprites/run-left.png',
-                1, 4),
-            'rolling-right': load_grid_animation(
-                'res/images/sprites/rolling-right.png',
-                1, 3),
-            'rolling-left': load_grid_animation(
-                'res/images/sprites/rolling-left.png',
-                1, 3),
-            'dying': load_grid_animation(
-                'res/images/sprites/dying.png',
-                1, 9, 0.12),
-        }
+        player_animations = load_animations({
+            'idle-right': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/idle-right.png', 1, 6]
+            },
+            'idle-left': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/idle-left.png',
+                 1, 6]},
+            'run-right': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/run-right.png',
+                 1, 4]},
+            'run-left': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/run-left.png',
+                 1, 4]},
+            'rolling-right': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/rolling-right.png',
+                 1, 3]},
+            'rolling-left': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/rolling-left.png',
+                 1, 3]},
+            'dying': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/dying.png',
+                 1, 9, 0.12]},
+        })
 
         self.player = Player(320, 0, player_animations,
                              player_animations['idle-right'],
                              batch=self.batch)
 
-        self.bird_animations = {
-            'bird-right': load_grid_animation(
-                'res/images/sprites/bird-right.png',
-                1, 7),
-            'bird-left': load_grid_animation(
-                'res/images/sprites/bird-left.png',
-                1, 7),
-        }
+        self.bird_animations = load_animations({
+            'bird-right': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/bird-right.png',
+                 1, 7]},
+            'bird-left': {
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/bird-left.png',
+                 1, 7]},
+        })
         self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
 
-        self.explosion_animation = load_grid_animation(
-            'res/images/sprites/explosion.png', 1, 6
-        )
+        self.explosion_animation = load_animation({
+                'loader': 'grid',
+                'parameters':
+                ['res/images/sprites/explosion.png', 1, 6]})
 
         self.sounds = {
             'pickup': pyglet.media.load('res/sfx/pickup.wav',
