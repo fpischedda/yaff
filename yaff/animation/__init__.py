@@ -6,6 +6,12 @@ _MATERIALIZED_LOADERS = {}
 
 
 def get_loader(name):
+    """
+    returns a callable associated with the specified animation loader
+    loaders can be setup by ANIMATION_LOADERS key in the settings file
+    default loaders are gif_loader and grid_loader
+    :param str name: name of the loader
+    """
     try:
         return _MATERIALIZED_LOADERS[name]
     except KeyError:
