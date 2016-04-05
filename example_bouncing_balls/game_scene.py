@@ -1,7 +1,6 @@
 import random
 import math
 import pyglet
-import pyqtree
 from yaff.scene import Scene
 from ball import Ball
 
@@ -14,6 +13,7 @@ def randomize_ball(boundaries, image, batch):
     b.y = random.randint(30, 400)
 
     return b
+
 
 class GameScene(Scene):
 
