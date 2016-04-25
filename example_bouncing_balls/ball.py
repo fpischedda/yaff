@@ -1,18 +1,26 @@
 import pyglet
-from yaff.contrib.mixins import Bouncing
+from yaff.contrib.mixins import BouncingMixin
+from yaff.contrib.mixins import LinearVelocityMixin
 
 
-class Ball(Bouncing, pyglet.sprite.Sprite):
+class Ball(BouncingMixin, LinearVelocityMixin,
+           pyglet.sprite.Sprite):
 
     def on_update(self, dt):
 
-        self.x += 120 * self.direction[0] * dt
-        self.y += 120 * self.direction[1] * dt
+        LinearVelocityMixin.on_update(self, dt)
 
-        diff = self.update_direction(self.bounding_box())
+        diff = self.check_boundaries(self.direction,
+                                     self.bounding_box())
 
         self.x -= diff[0]
         self.y -= diff[1]
+
+        if diff[0] != 0:
+            self.direction[0] *= -1
+
+        if diff[1] != 0:
+            self.direction[1] *= -1
 
     def bounding_box(self):
 

@@ -1,7 +1,7 @@
 import math
 
 
-class LinearVelocityMixin(object):
+class LinearVelocityMixin:
     """"
     simple mixin to add linear velocity to a sprite
     this mixin will intercept on_update call to update sprite position
@@ -15,7 +15,7 @@ class LinearVelocityMixin(object):
 
         self.direction = direction
         self.speed = speed
-        self.__init__(LinearVelocityMixin, *args, **kwargs)
+        super(LinearVelocityMixin, self).__init__(*args, **kwargs)
 
     def set_speed(self, speed):
         self.speed = speed
@@ -23,11 +23,10 @@ class LinearVelocityMixin(object):
     def set_direction(self, x_dir, y_dir):
         self.direction = (x_dir, y_dir)
 
-    def ser_direction_from_angle(self, angle):
+    def set_direction_from_angle(self, angle):
         self.direction = (math.cos(angle), math.sin(angle))
 
     def on_update(self, dt):
-        super(LinearVelocityMixin, self).on_update(dt)
 
         scaled_speed = self.speed * dt
         x = getattr(self, self.LINEAR_VELOCITY_MIXIN_X_ATTRIBUTE)

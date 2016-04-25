@@ -8,7 +8,8 @@ from ball import Ball
 def randomize_ball(boundaries, image, batch):
     angle = random.randint(0, 360) * 3.14 / 360
     direction = [math.cos(angle), math.sin(angle)]
-    b = Ball(boundaries, direction, image, batch=batch)
+    speed = random.randint(50, 200)
+    b = Ball(boundaries, direction, speed, image, batch=batch)
     b.x = random.randint(30, 600)
     b.y = random.randint(30, 400)
 
