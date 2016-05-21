@@ -1,8 +1,8 @@
 import pyglet
-from yaff.contrib.mixins import Bouncing
+from yaff.contrib.mixins import BouncingMixin
 
 
-class Letter(Bouncing, pyglet.sprite.Sprite):
+class Letter(BouncingMixin, pyglet.sprite.Sprite):
 
     def __init__(self, life_milliseconds, *args, **kwargs):
         self.life_milliseconds = life_milliseconds
