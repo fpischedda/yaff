@@ -1,14 +1,14 @@
 import pyglet
 import settings
+import random
 
 
 class Tweet(pyglet.sprite.Sprite):
 
     def __init__(self, tweet, direction, animations, *args, **kwargs):
 
-        self.text = tweet['text']
-        speed_variance = min(
-            tweet['retweet_count'] * 2 + tweet['friends_count'] // 2, 100)
+        self.text = tweet
+        speed_variance = random.randint(100, 200)
         speed = settings.TWEET_START_SPEED + speed_variance
         self.direction = [direction[0] * speed,
                           direction[1] * speed]

@@ -25,10 +25,10 @@ def spawn_letters(bitmap_font, text, start_x, start_y, batch, boundaries):
     for letter in text:
         letter_image = bitmap_font.get_image(letter)
         direction = [math.cos(angle), math.sin(angle)]
-        l = Letter(5.0, boundaries,
-                   direction,
-                   letter_image,
-                   batch=batch)
+        l = Letter(img=letter_image,
+                   batch=batch,
+                   life_milliseconds=5.0, boundaries=boundaries,
+                   direction=direction)
         l.x = start_x
         l.y = start_y
 

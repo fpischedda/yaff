@@ -1,13 +1,16 @@
 import pyglet
 from yaff.contrib.mixins import BouncingMixin
+from yaff.contrib.mixins import LinearVelocityMixin
 
 
-class Letter(BouncingMixin, pyglet.sprite.Sprite):
+class Letter(BouncingMixin,
+             LinearVelocityMixin,
+             pyglet.sprite.Sprite):
 
-    def __init__(self, life_milliseconds, *args, **kwargs):
+    def __init__(self, life_milliseconds,
+                 *args, **kwargs):
         self.life_milliseconds = life_milliseconds
-        self.speed = 120
-        super(Letter, self).__init__(*args, **kwargs)
+        super(Letter, self).__init__(speed=120, *args, **kwargs)
         self.scale = 2
 
     def die(self):
@@ -19,7 +22,8 @@ class Letter(BouncingMixin, pyglet.sprite.Sprite):
         self.x += self.speed * self.direction[0] * dt
         self.y += self.speed * self.direction[1] * dt
 
-        diff = self.update_direction(self.bounding_box())
+        diff = self.check_boundaries(self.direction,
+                                     self.bounding_box())
 
         self.x -= diff[0]
         self.y -= diff[1]

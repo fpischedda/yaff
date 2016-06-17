@@ -1,8 +1,6 @@
 import random
 import math
 import pyglet
-import queue
-import threading
 from yaff.conf import settings
 from yaff.scene import Scene
 from yaff.animation import load_animation
@@ -10,19 +8,8 @@ from tweet import Tweet
 from player import Player
 from explosion import Explosion
 from bitmap_font import BitmapFont
-from consumer import Consumer
 from gameover_scene import GameOverScene
 from utils import spawn_letters
-
-
-def feeds_worker(message_queue):
-
-    consumer = Consumer(settings.BROKER_URL, message_queue)
-
-    try:
-        consumer.start_consuming()
-    except:
-        consumer.close_connection()
 
 
 def randomize_starting_point():
@@ -58,7 +45,7 @@ class GameScene(Scene):
 
         self.image = pyglet.resource.image('res/images/sprites/sprite.png')
 
-        self.queue = queue.Queue()
+        self.tweet_timeout = 1.5
 
         self.boundaries = [0, 0, 640, 480]
 
@@ -69,12 +56,18 @@ class GameScene(Scene):
 
         self.points = 0
         self.new_points = 0
-        self.points_label = pyglet.text.Label('0',
+        self.timeout_label = pyglet.text.Label('0',
                                                font_name='Times New Roman',
                                                font_size=36,
-                                               x=630, y=460,
+                                               x=630, y=360,
                                                anchor_x='right',
                                                anchor_y='top')
+        self.points_label = pyglet.text.Label('0',
+                                              font_name='Times New Roman',
+                                              font_size=36,
+                                              x=630, y=460,
+                                              anchor_x='right',
+                                              anchor_y='top')
 
         player_animations = load_animations({
             'idle-right': {
@@ -142,17 +135,6 @@ class GameScene(Scene):
                                         streaming=False),
         }
 
-        self.start_feeds_thread()
-
-    def start_feeds_thread(self):
-
-        print("starting feed thread...")
-        t = threading.Thread(target=feeds_worker, args=(self.queue,))
-        t.daemon = True
-        t.start()
-
-        print("feed thread started...")
-        self.thread = t
 
     def on_key_release(self, symbol, modifier):
 
@@ -178,12 +160,11 @@ class GameScene(Scene):
 
     def add_tweets(self):
 
-        while not self.queue.empty():
-            msg = self.queue.get()
+        for i in range(10):
+            msg = "Boo" + "O" * i + "M!!!"
             self.tweets.append(randomize_tweet(self.bird_animations,
                                                self.batch,
                                                msg))
-            self.queue.task_done()
 
     def check_tweet_collisions(self):
         bbox = self.player.bounding_box()
@@ -222,9 +203,13 @@ class GameScene(Scene):
             self.points_label.text = str(self.points)
 
     def on_update(self, dt):
-        self.add_tweets()
-        for b in self.tweets:
-            b.on_update(dt)
+        self.tweet_timeout -= dt
+        if self.tweet_timeout < 0:
+            self.tweet_timeout = 1.5
+            self.add_tweets()
+            for b in self.tweets:
+                b.on_update(dt)
+        self.timeout_label.text = str(self.tweet_timeout)
 
         if self.player.is_alive():
             self.check_letter_collisions()
@@ -250,3 +235,4 @@ class GameScene(Scene):
         self.background.blit(bg_x, bg_y)
         self.batch.draw()
         self.points_label.draw()
+        self.timeout_label.draw()
