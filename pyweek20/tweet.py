@@ -1,11 +1,15 @@
 import pyglet
 import settings
 import random
+from yaff.contrib.mixins import LinearVelocityMixin
+from yaff.contrib.mixins import GravityMixin
 
 
-class Tweet(pyglet.sprite.Sprite):
+class Tweet(GravityMixin,
+            LinearVelocityMixin,
+            pyglet.sprite.Sprite):
 
-    def __init__(self, tweet, direction, animations, *args, **kwargs):
+    def __init__(self, tweet, direction, gravity, animations, *args, **kwargs):
 
         self.text = tweet
         speed_variance = random.randint(100, 200)
@@ -21,23 +25,19 @@ class Tweet(pyglet.sprite.Sprite):
             anim = animations['bird-left']
 
         self.animations = animations
-        super(Tweet, self).__init__(anim, *args, **kwargs)
-        self.scale = max(70, len(self.text)) / 140.0
+        super(Tweet, self).__init__(anim, direction=direction,
+                                    gravity=gravity,
+                                    *args, **kwargs)
+        self.scale = max(70, len(self.text) * 15) / 140.0
 
     def die(self):
 
         self.delete()
         return self.text
 
-    def apply_gravity(self, dt):
-        self.direction[1] -= settings.GRAVITY * dt
-
     def on_update(self, dt):
 
-        self.apply_gravity(dt)
-
-        self.x += self.direction[0] * dt
-        self.y += self.direction[1] * dt
+        super(Tweet, self).on_update(dt)
 
         if self.y < 0:
             self.y = -self.y // 2
