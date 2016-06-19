@@ -24,7 +24,8 @@ def randomize_tweet(animations, batch, msg):
     angle, x, y = randomize_starting_point()
 
     direction = [math.cos(angle), math.sin(angle)]
-    b = Tweet(msg, direction, animations, batch=batch)
+    b = Tweet(msg, settings.GRAVITY,
+              direction, animations, batch=batch)
     b.x = x
     b.y = y
 

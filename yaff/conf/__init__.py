@@ -1,3 +1,11 @@
+"""
+yaff.conf module exports settings for the application
+the settings module can be specified via a YAFF_SETTINGS_MODULE
+env variable and defaults to 'settings'
+once loaded, user settings are merged with default settings
+and are available to user application via yaff.conf.settings
+import path
+"""
 import importlib
 import os
 from . import global_settings
@@ -23,7 +31,7 @@ class BaseSettings(object):
              if k.isupper()}
 
         try:
-            module = os.environ.get(ENV_SETTINGS_MODULE, None)
+            module = os.environ.get(ENV_SETTINGS_MODULE, 'settings')
         except:
             raise ImproperlyConfiguredError("Please specify a settings module")
 
