@@ -1,4 +1,5 @@
 import pyglet
+import bulletml
 from yaff.scene import Scene
 from yaff.contrib.bitmap_font import BitmapFont
 from yaff.animation import load_animation
@@ -22,8 +23,26 @@ class GameScene(Scene):
 
         self.boundaries = [0, 0, 640, 480]
 
-        self.bitmap_font = BitmapFont('res/images/fonts/font.png', 5, 10)
+        self.setup_points()
         self.batch = pyglet.graphics.Batch()
+        self.player = self.setup_player(self.batch)
+
+        self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
+
+        self.sounds = {
+            'pickup': pyglet.media.load('res/sfx/pickup.wav',
+                                        streaming=False),
+        }
+
+    def setup_bulletml(self, target):
+        with open('res/bulletml/threefire-offset.xml', 'rU') as f:
+            doc = bulletml.BulletML.FromDocument(f)
+            bullet = bulletml.Bullet.FromDocument(doc, 320, 240,
+                                                  target=target, rank=.05)
+            self.bullets = [bullet]
+
+    def setup_points(self):
+        self.bitmap_font = BitmapFont('res/images/fonts/font.png', 5, 10)
 
         self.points = 0
         self.new_points = 0
@@ -34,6 +53,7 @@ class GameScene(Scene):
                                               anchor_x='right',
                                               anchor_y='top')
 
+    def setup_player(self, batch):
         player_animations = {
             'idle-right': {
                 'loader': 'grid',
@@ -69,15 +89,9 @@ class GameScene(Scene):
             },
         }
 
-        self.player = Player(320, 0, player_animations,
-                             player_animations['idle-right'],
-                             batch=self.batch)
-        self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
-
-        self.sounds = {
-            'pickup': pyglet.media.load('res/sfx/pickup.wav',
-                                        streaming=False),
-        }
+        return Player(320, 0, player_animations,
+                      player_animations['idle-right'],
+                      batch=batch)
 
     def on_key_release(self, symbol, modifier):
 
