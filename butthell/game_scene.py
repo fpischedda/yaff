@@ -3,8 +3,9 @@ import bulletml
 from yaff.scene import Scene
 from yaff.contrib.bitmap_font import BitmapFont
 from yaff.animation import load_animation
-from player import Player
-from gameover_scene import GameOverScene
+from .player import Player
+from .bullet import Bullet
+from .gameover_scene import GameOverScene
 
 
 def load_animations(animations_def):
@@ -27,15 +28,18 @@ class GameScene(Scene):
         self.batch = pyglet.graphics.Batch()
         self.player = self.setup_player(self.batch)
 
+        self.setup_bulletml(self.player)
+
         self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
 
         self.sounds = {
-            'pickup': pyglet.media.load('res/sfx/pickup.wav',
-                                        streaming=False),
+            'pickup': pyglet.resource.media('res/sfx/pickup.wav',
+                                            streaming=False),
         }
 
     def setup_bulletml(self, target):
-        with open('res/bulletml/threefire-offset.xml', 'rU') as f:
+        with pyglet.resource.file(
+                'res/bulletml/threefire-offset.xml', 'rU') as f:
             doc = bulletml.BulletML.FromDocument(f)
             bullet = bulletml.Bullet.FromDocument(doc, 320, 240,
                                                   target=target, rank=.05)
@@ -89,8 +93,8 @@ class GameScene(Scene):
             },
         }
 
-        return Player(320, 0, player_animations,
-                      player_animations['idle-right'],
+        return Player(320, 0, load_animations(player_animations),
+                      'idle-right',
                       batch=batch)
 
     def on_key_release(self, symbol, modifier):
@@ -124,8 +128,13 @@ class GameScene(Scene):
     def on_update(self, dt):
 
         if self.player.is_alive():
-            self.check_letter_collisions()
-            self.check_tweet_collisions()
+            new_ones = []
+
+            for b in self.bullets:
+                new_ones.extend(b.step())
+
+            self.bullets.extend((Bullet(10, x=b.x, y=b.y)
+                                 for b in new_ones))
 
         if self.player.on_update(dt) is False:
             self.director.prepare_next_scene(GameOverScene, self.new_points)

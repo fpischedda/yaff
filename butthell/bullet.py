@@ -1,12 +1,11 @@
 import pyglet
-from yaff.contrib.mixins.linear_velocity import LinearVelocityMixin
-from yaff.collidable import Collideable
 
 
-class Bullet(Collideable, LinearVelocityMixin, pyglet.sprite.Sprite):
+class Bullet(pyglet.sprite.Sprite):
 
     def __init__(self, hit_damage, *args, **kwargs):
 
         self.hit_damage = hit_damage
+        image = pyglet.resource.image('res/images/sprites/sprite.png')
 
-        super(Bullet, self).__init__(*args, **kwargs)
+        super(Bullet, self).__init__(image, *args, **kwargs)

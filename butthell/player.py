@@ -1,5 +1,5 @@
 import pyglet
-import settings
+from yaff.conf import settings
 
 
 class Player(pyglet.sprite.Sprite):
@@ -12,9 +12,11 @@ class Player(pyglet.sprite.Sprite):
     STATUS_DYING = 1
     STATUS_DEAD = 2
 
-    def __init__(self, start_x, start_y, animations, *args, **kwargs):
+    def __init__(self, start_x, start_y, animations, starting_animation,
+                 *args, **kwargs):
 
-        super(Player, self).__init__(*args, **kwargs)
+        image = animations[starting_animation]
+        super(Player, self).__init__(image, *args, **kwargs)
 
         self.animations = animations
         self.set_position(start_x, start_y)
@@ -27,10 +29,10 @@ class Player(pyglet.sprite.Sprite):
 
         self.status = self.STATUS_ALIVE
         self.sounds = {
-            'jump': pyglet.media.load('res/sfx/player_jump.wav',
-                                      streaming=False),
-            'die': pyglet.media.load('res/sfx/player_died.wav',
-                                      streaming=False),
+            'jump': pyglet.resource.media('res/sfx/player_jump.wav',
+                                          streaming=False),
+            'die': pyglet.resource.media('res/sfx/player_died.wav',
+                                         streaming=False),
         }
 
     def set_image(self, image):
