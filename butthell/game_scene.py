@@ -21,6 +21,8 @@ class GameScene(Scene):
         super(GameScene, self).__init__(*args, **kwargs)
 
         self.image = pyglet.resource.image('res/images/sprites/sprite.png')
+        self.bullet_image = pyglet.resource.image(
+            'res/images/sprites/bullet.png')
 
         self.boundaries = [0, 0, 640, 480]
 
@@ -39,7 +41,7 @@ class GameScene(Scene):
 
     def setup_bulletml(self, target):
         with pyglet.resource.file(
-                'res/bulletml/threefire-offset.xml', 'rU') as f:
+                'res/bulletml/down.xml', 'rU') as f:
             doc = bulletml.BulletML.FromDocument(f)
             bullet = bulletml.Bullet.FromDocument(doc, 320, 240,
                                                   target=target, rank=.05)
@@ -133,8 +135,10 @@ class GameScene(Scene):
             for b in self.bullets:
                 new_ones.extend(b.step())
 
-            self.bullets.extend((Bullet(10, x=b.x, y=b.y)
-                                 for b in new_ones))
+            self.bullets.extend(new_ones)
+
+            self.bullets = [b for b in self.bullets
+                            if not b.finished]
 
         if self.player.on_update(dt) is False:
             self.director.prepare_next_scene(GameOverScene, self.new_points)
@@ -151,4 +155,6 @@ class GameScene(Scene):
             bg_y = -240
         self.background.blit(bg_x, bg_y)
         self.batch.draw()
+        for b in self.bullets:
+            self.bullet_image.blit(b.x, b.y)
         self.points_label.draw()
