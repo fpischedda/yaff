@@ -1,9 +1,11 @@
 import pyglet
+import bulletml
 from yaff.scene import Scene
 from yaff.contrib.bitmap_font import BitmapFont
 from yaff.animation import load_animation
-from player import Player
-from gameover_scene import GameOverScene
+from .player import Player
+from .bullet import Bullet
+from .gameover_scene import GameOverScene
 
 
 def load_animations(animations_def):
@@ -19,11 +21,34 @@ class GameScene(Scene):
         super(GameScene, self).__init__(*args, **kwargs)
 
         self.image = pyglet.resource.image('res/images/sprites/sprite.png')
+        self.bullet_image = pyglet.resource.image(
+            'res/images/sprites/bullet.png')
 
         self.boundaries = [0, 0, 640, 480]
 
-        self.bitmap_font = BitmapFont('res/images/fonts/font.png', 5, 10)
+        self.setup_points()
         self.batch = pyglet.graphics.Batch()
+        self.player = self.setup_player(self.batch)
+
+        self.setup_bulletml(self.player)
+
+        self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
+
+        self.sounds = {
+            'pickup': pyglet.resource.media('res/sfx/pickup.wav',
+                                            streaming=False),
+        }
+
+    def setup_bulletml(self, target):
+        with pyglet.resource.file(
+                'res/bulletml/boss.xml', 'rU') as f:
+            doc = bulletml.BulletML.FromDocument(f)
+            bullet = bulletml.Bullet.FromDocument(doc, 320, 240,
+                                                  target=target, rank=.05)
+            self.bullets = [bullet]
+
+    def setup_points(self):
+        self.bitmap_font = BitmapFont('res/images/fonts/font.png', 5, 10)
 
         self.points = 0
         self.new_points = 0
@@ -34,6 +59,7 @@ class GameScene(Scene):
                                               anchor_x='right',
                                               anchor_y='top')
 
+    def setup_player(self, batch):
         player_animations = {
             'idle-right': {
                 'loader': 'grid',
@@ -69,15 +95,9 @@ class GameScene(Scene):
             },
         }
 
-        self.player = Player(320, 0, player_animations,
-                             player_animations['idle-right'],
-                             batch=self.batch)
-        self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
-
-        self.sounds = {
-            'pickup': pyglet.media.load('res/sfx/pickup.wav',
-                                        streaming=False),
-        }
+        return Player(320, 0, load_animations(player_animations),
+                      'idle-right',
+                      batch=batch)
 
     def on_key_release(self, symbol, modifier):
 
@@ -110,8 +130,15 @@ class GameScene(Scene):
     def on_update(self, dt):
 
         if self.player.is_alive():
-            self.check_letter_collisions()
-            self.check_tweet_collisions()
+            new_ones = []
+
+            for b in self.bullets:
+                new_ones.extend(b.step())
+
+            self.bullets.extend(new_ones)
+
+            self.bullets = [b for b in self.bullets
+                            if not b.finished]
 
         if self.player.on_update(dt) is False:
             self.director.prepare_next_scene(GameOverScene, self.new_points)
@@ -128,4 +155,6 @@ class GameScene(Scene):
             bg_y = -240
         self.background.blit(bg_x, bg_y)
         self.batch.draw()
+        for b in self.bullets:
+            self.bullet_image.blit(b.x, b.y)
         self.points_label.draw()
