@@ -41,7 +41,7 @@ class GameScene(Scene):
 
     def setup_bulletml(self, target):
         with pyglet.resource.file(
-                'res/bulletml/down.xml', 'rU') as f:
+                'res/bulletml/boss.xml', 'rU') as f:
             doc = bulletml.BulletML.FromDocument(f)
             bullet = bulletml.Bullet.FromDocument(doc, 320, 240,
                                                   target=target, rank=.05)
