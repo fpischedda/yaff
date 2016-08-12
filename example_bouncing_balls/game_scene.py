@@ -2,7 +2,7 @@ import random
 import math
 import pyglet
 from yaff.scene import Scene
-from ball import Ball
+from .ball import Ball
 
 
 def randomize_ball(boundaries, image, batch):
