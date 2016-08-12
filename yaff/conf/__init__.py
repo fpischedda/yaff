@@ -30,10 +30,7 @@ class BaseSettings(object):
         g = {k: getattr(global_settings, k) for k in dir(global_settings)
              if k.isupper()}
 
-        try:
-            module = os.environ.get(ENV_SETTINGS_MODULE, 'settings')
-        except:
-            raise ImproperlyConfiguredError("Please specify a settings module")
+        module = os.environ.get(ENV_SETTINGS_MODULE, None)
 
         if module is not None:
             try:
@@ -45,7 +42,8 @@ class BaseSettings(object):
             custom = {k: getattr(sm, k) for k in dir(sm) if k.isupper()}
 
             # merge defauls with user's custom settings
-            self._settings = {**g, **custom}
+            self._settings = g.copy()
+            self._settings.update(custom)
         else:
             self._settings = g
 
