@@ -9,6 +9,9 @@ class Player(pyglet.sprite.Sprite):
     DIRECTION_UP = 2
     DIRECTION_DOWN = 3
 
+    HORIZ_DIR = (1 << DIRECTION_LEFT) | (1 << DIRECTION_RIGHT)
+    VERT_DIR = (1 << DIRECTION_UP) | (1 << DIRECTION_DOWN)
+
     STATUS_ALIVE = 0
     STATUS_DEAD = 1
 
@@ -32,7 +35,7 @@ class Player(pyglet.sprite.Sprite):
     def set_animation(self, animation_name):
         self.image = self.animations[animation_name]
 
-    def set_key_pressed(self, direction_key):
+    def on_key_pressed(self, direction_key):
 
         if self.status != self.STATUS_ALIVE:
             return
@@ -49,30 +52,37 @@ class Player(pyglet.sprite.Sprite):
             self.direction[0] = 1
 
         if direction_key == self.DIRECTION_UP:
-            self.direction[1] = -1
-        elif direction_key == self.DIRECTION_DOWN:
             self.direction[1] = 1
+        elif direction_key == self.DIRECTION_DOWN:
+            self.direction[1] = -1
 
 
-    def set_key_released(self, direction_key):
+    def on_key_released(self, direction_key):
 
         if self.status != self.STATUS_ALIVE:
             return
 
-        self.key_pressed &= ~(1 << direction_key)
+        key_released = (1 << direction_key)
+        self.key_pressed &= ~key_released
 
-        if self.key_pressed != 0:
-            if direction_key == self.DIRECTION_LEFT:
-                self.set_key_pressed(self.DIRECTION_RIGHT)
-            elif direction_key == self.DIRECTION_RIGHT:
-                self.set_key_pressed(self.DIRECTION_LEFT)
-        elif not self.jumping:
-            if direction_key == self.DIRECTION_LEFT:
-                self.set_animation('idle-left')
+        if key_released & self.HORIZ_DIR:
+            if self.key_pressed & self.HORIZ_DIR:
+                if direction_key == self.DIRECTION_LEFT:
+                    self.direction[0] = 1
+                elif direction_key == self.DIRECTION_RIGHT:
+                    self.direction[0] = -1
             else:
-                self.set_animation('idle-right')
+                self.direction[0] = 0
 
-            self.direction[0] = 0
+        elif key_released & self.VERT_DIR:
+            if self.key_pressed & self.VERT_DIR:
+                if direction_key == self.DIRECTION_UP:
+                    self.direction[1] = -1
+                elif direction_key == self.DIRECTION_DOWN:
+                    self.direction[1] = 1
+            else:
+                self.direction[1] = 0
+
 
     def on_animation_end(self):
         if self.status == self.STATUS_DYING:
@@ -99,9 +109,6 @@ class Player(pyglet.sprite.Sprite):
 
         if self.x > 640 - self.width:
             self.x = 640 - self.width
-
-        if self.jumping:
-            self.direction[1] -= settings.GRAVITY / 4 * dt
 
         return True
 

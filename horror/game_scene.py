@@ -7,6 +7,12 @@ from .player import Player
 
 class GameScene(Scene):
 
+    KEY_MOVEMENT_MAPPING = {
+        pyglet.window.key.A: Player.DIRECTION_LEFT,
+        pyglet.window.key.D: Player.DIRECTION_RIGHT,
+        pyglet.window.key.W: Player.DIRECTION_UP,
+        pyglet.window.key.S: Player.DIRECTION_DOWN,
+    }
     def __init__(self, *args, **kwargs):
 
         super(GameScene, self).__init__(*args, **kwargs)
@@ -21,10 +27,20 @@ class GameScene(Scene):
 
     def on_key_press(self, symbol, modifier):
 
-        return True
+        if symbol in self.KEY_MOVEMENT_MAPPING:
+            self.player.on_key_pressed(self.KEY_MOVEMENT_MAPPING[symbol])
+            return True
+        return False
+
+    def on_key_release(self, symbol, modifier):
+
+        if symbol in self.KEY_MOVEMENT_MAPPING:
+            self.player.on_key_released(self.KEY_MOVEMENT_MAPPING[symbol])
+            return True
+        return False
 
     def on_update(self, dt):
-        pass
+        self.player.on_update(dt)
 
     def on_draw(self, window):
 
