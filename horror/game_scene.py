@@ -23,6 +23,11 @@ class GameScene(Scene):
 
         self.player = Player(0, 0, image, batch=self.batch)
 
+        body_img = pyglet.resource.image('res/images/ui/body.png')
+        self.body = pyglet.sprite.Sprite(body_img, x=100, y=0,
+                                         batch=self.batch)
+        self.body.scale = 0.3
+
         self.background = pyglet.resource.image('res/images/bg/bg.jpg')
 
     def on_key_press(self, symbol, modifier):
