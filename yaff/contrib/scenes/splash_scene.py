@@ -22,7 +22,7 @@ class SplashScene(Scene):
     def __init__(self, *args, **kwargs):
 
         try:
-            self.splash_image_path = kwargs.pop('spash_image_path')
+            self.splash_image_path = kwargs.pop('splash_image_path')
         except:
             pass
 
