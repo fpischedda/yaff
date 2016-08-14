@@ -32,8 +32,6 @@ class SplashScene(Scene):
             pass
 
         try:
-            from pudb import set_trace
-            set_trace()
             sound_loop_path = kwargs.pop('sound_file_path')
             sound = pyglet.resource.media(sound_loop_path,
                                           streaming=False)
