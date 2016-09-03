@@ -58,6 +58,12 @@ class Director:
                                                  'on_key_release'):
             current_scene.on_key_release(symbol, modifier)
 
+    def on_mouse_motion(self, *args, **kwargs):
+        current_scene = self.current_scene()
+        if current_scene is not None and hasattr(current_scene,
+                                                 'on_mouse_motion'):
+            current_scene.on_mouse_motion(*args, **kwargs)
+
     def on_draw(self):
         current_scene = self.current_scene()
         if current_scene is not None and hasattr(current_scene, 'on_draw'):
