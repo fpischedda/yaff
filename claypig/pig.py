@@ -2,45 +2,40 @@ import pyglet
 import math
 import random
 from yaff.contrib.mixins.linear_velocity import LinearVelocityMixin
-from yaff.contrib.mixins.friction import FrictionMixin
 from yaff.contrib.mixins.gravity import GravityMixin
 
 
 class Pig(pyglet.sprite.Sprite, LinearVelocityMixin,
-          FrictionMixin, GravityMixin):
+          GravityMixin):
 
     STATUS_ALIVE = 0
     STATUS_DEAD = 1
 
-    START_LEFT = 1
-    START_RIGHT = -1
+    START_LEFT = 0
+    START_RIGHT = 1
 
-    def __init__(self, start_side, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
-        if start_side == self.START_LEFT:
+        super(Pig, self).__init__(direction=(0, 0),
+                                  speed=0,
+                                  *args, **kwargs)
+
+        self.speed = 150
+        self.status = self.STATUS_ALIVE
+
+    def spawn(self, side, speed):
+        if side == self.START_LEFT:
             angle = random.randint(20, 70)
             start_x = 0
         else:
             start_x = 640
             angle = random.randint(110, 160)
 
-        direction = (math.cos(angle),
-                     math.sin(angle))
+        self.direction = (math.cos(angle),
+                          math.sin(angle))
 
-        speed = math.randint(20, 100)
-
-        super(Pig, self).__init__(direction=direction,
-                                  speed=speed,
-                                  *args, **kwargs)
-
+        self.speed = math.randint(20, 100)
         self.set_position(start_x, 0)
-
-        self.speed = 150
-        self.status = self.STATUS_ALIVE
-
-    def get_friction_direction(self):
-        return (-self.direction[0],
-                -self.direction[1])
 
     def set_image(self, image):
         self.image = image
