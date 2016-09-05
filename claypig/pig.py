@@ -5,8 +5,9 @@ from yaff.contrib.mixins.linear_velocity import LinearVelocityMixin
 from yaff.contrib.mixins.gravity import GravityMixin
 
 
-class Pig(pyglet.sprite.Sprite, LinearVelocityMixin,
-          GravityMixin):
+class Pig(LinearVelocityMixin,
+          GravityMixin,
+          pyglet.sprite.Sprite):
 
     STATUS_ALIVE = 0
     STATUS_DEAD = 1
@@ -16,11 +17,14 @@ class Pig(pyglet.sprite.Sprite, LinearVelocityMixin,
 
     def __init__(self, *args, **kwargs):
 
+        print(args, kwargs)
+        from pudb import set_trace
+        set_trace()
         super(Pig, self).__init__(direction=(0, 0),
                                   speed=0,
+                                  gravity=9.8,
                                   *args, **kwargs)
 
-        self.speed = 150
         self.status = self.STATUS_ALIVE
 
     def spawn(self, side, speed):
@@ -53,7 +57,7 @@ class Pig(pyglet.sprite.Sprite, LinearVelocityMixin,
 
     def on_update(self, dt):
 
-        return super(Pig, self).update(dt)
+        return super(Pig, self).on_update(dt)
 
     def bounding_box(self):
 

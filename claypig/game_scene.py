@@ -11,15 +11,15 @@ class GameScene(Scene):
         super(GameScene, self).__init__(*args, **kwargs)
 
         aim_image = pyglet.resource.image('res/images/sprites/aim.png')
-        pig_image = pyglet.resource.image('res/images/sprites/sprite.png')
+        pig_image = pyglet.resource.image('res/images/sprites/pig.png')
 
         self.batch = pyglet.graphics.Batch()
 
         self.aim = pyglet.sprite.Sprite(aim_image, x=100, y=0,
                                         batch=self.batch)
 
-        self.pig = pyglet.sprite.Sprite(pig_image, x=100, y=0,
-                                        batch=self.batch)
+        self.pig = Pig(pig_image, x=100, y=0,
+                       batch=self.batch)
 
         self.background = pyglet.resource.image('res/images/bg/bg.jpg')
 
@@ -31,7 +31,7 @@ class GameScene(Scene):
         self.pig.spaw(side)
 
     def on_update(self, dt):
-        self.pig.update(dt)
+        self.pig.on_update(dt)
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.aim.set_position(x, y)
