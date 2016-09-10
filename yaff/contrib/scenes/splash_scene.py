@@ -48,6 +48,8 @@ class SplashScene(Scene):
 
             player.play()
             self.player = player
+        except KeyError as e:
+            pass
         except Exception as e:
             print('Sound loop exception: ', e)
             self.player = None
