@@ -23,7 +23,7 @@ def get_loader(name):
 def load_animation(animation_data):
     func = get_loader(animation_data['loader'])
 
-    params = animation_data['loader_params']
+    params = animation_data['parameters']
     if isinstance(params, dict):
         return func(**params)
     elif isinstance(params, list):
