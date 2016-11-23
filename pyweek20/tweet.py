@@ -9,13 +9,11 @@ class Tweet(GravityMixin,
             LinearVelocityMixin,
             pyglet.sprite.Sprite):
 
-    def __init__(self, tweet, gravity, direction, animations, *args, **kwargs):
+    def __init__(self, tweet, animations, direction, *args, **kwargs):
 
         self.text = tweet
         speed_variance = random.randint(100, 200)
         speed = settings.TWEET_START_SPEED + speed_variance
-        self.direction = [direction[0] * speed,
-                          direction[1] * speed]
 
         self.elasticity = settings.TWEET_ELASTICITY
 
@@ -25,11 +23,11 @@ class Tweet(GravityMixin,
             anim = animations['bird-left']
 
         self.animations = animations
-        super(Tweet, self).__init__(anim,
-                                    direction=direction,
-                                    gravity=gravity,
-                                    speed=speed,
-                                    *args, **kwargs)
+
+        kwargs['direction'] = direction
+        kwargs['speed'] = speed
+        kwargs['img'] = anim
+        super(Tweet, self).__init__(*args, **kwargs)
         self.scale = max(70, len(self.text) * 15) / 140.0
 
     def die(self):
