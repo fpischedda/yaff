@@ -1,7 +1,7 @@
 import random
 import math
 import pyglet
-from letter import Letter
+from .letter import Letter
 
 
 def random_color():

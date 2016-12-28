@@ -1,8 +1,8 @@
 import pyglet
-import settings
 import random
 from yaff.contrib.mixins import LinearVelocityMixin
 from yaff.contrib.mixins import GravityMixin
+from yaff.conf import settings
 
 
 class Tweet(GravityMixin,

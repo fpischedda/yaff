@@ -1,5 +1,5 @@
 import pyglet
-import settings
+from yaff.conf import settings
 
 
 class Player(pyglet.sprite.Sprite):
