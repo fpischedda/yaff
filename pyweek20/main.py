@@ -1,6 +1,6 @@
 from yaff import app
 from yaff.contrib.scenes import SplashScene
-from game_scene import GameScene
+from .game_scene import GameScene
 
 
 def run():

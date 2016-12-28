@@ -4,12 +4,12 @@ import pyglet
 from yaff.conf import settings
 from yaff.scene import Scene
 from yaff.animation import load_animation
-from tweet import Tweet
-from player import Player
-from explosion import Explosion
-from bitmap_font import BitmapFont
-from gameover_scene import GameOverScene
-from utils import spawn_letters
+from .tweet import Tweet
+from .player import Player
+from .explosion import Explosion
+from .bitmap_font import BitmapFont
+from .gameover_scene import GameOverScene
+from .utils import spawn_letters
 
 
 def randomize_starting_point():
