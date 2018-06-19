@@ -11,9 +11,9 @@ This little framework is the latest attempt to create a basic framework to help
 me in the process of building simple 2D games; I don't expect it to grow in to
 something professional or generally useful.
 
-The framework is being developed with python 3.4, if you want to support other
-versions of python you have to do some work by yourself, and please provide
-patches :)
+The framework is being developed with CPython 3.4 (now 3.6), if you want to
+support other versions of python you have to do some work by yourself, and
+please provide patches :)
 
 Basic concepts
 --------------
@@ -31,11 +31,14 @@ to game logic.
 Example
 -------
 
-In order to run the example:
+In order to run the simplest example:
 - create your virtual environment and install requirements with: pip install -r
   requirements.txt
-- cd example
-- python main.py
+- install yaff in the virtualenv with: python setup.py install
+- run: python -m example_bouncing_balls.main
+
+The other projects included in the repo are usually broken and may require
+more work to run, for example pyweek20 requires more effort to run it.
 
 License
 -------
