@@ -1,5 +1,4 @@
 import pyglet
-import bulletml
 from yaff.scene import Scene
 from yaff.contrib.bitmap_font import BitmapFont
 from yaff.animation import load_animation
@@ -30,21 +29,12 @@ class GameScene(Scene):
         self.batch = pyglet.graphics.Batch()
         self.player = self.setup_player(self.batch)
 
-        self.setup_bulletml(self.player)
-
         self.background = pyglet.resource.image('images/bg/bg1.jpg')
 
         self.sounds = {
             'pickup': pyglet.resource.media(
                 'sfx/pickup.wav', streaming=False),
         }
-
-    def setup_bulletml(self, target):
-        with pyglet.resource.file('bulletml/boss.xml', 'rU') as f:
-            doc = bulletml.BulletML.FromDocument(f)
-            bullet = bulletml.Bullet.FromDocument(
-                doc, 320, 240, target=target, rank=.05)
-            self.bullets = [bullet]
 
     def setup_points(self):
         self.bitmap_font = BitmapFont('images/fonts/font.png', 5, 10)
