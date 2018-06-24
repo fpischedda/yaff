@@ -23,7 +23,8 @@ quickly with the game logic; the fundamental pieces are the Director class and
 the Scene class:
 - Director: handles scense and propagates events to the active Scene object
 - Scene: abstracts a scene; receives user input events, and provide two
-  fundamental callbacks on_draw and on_update
+  fundamental callbacks on_draw and on_update; for other callbacks please
+    have a look at yaff/scene.py (sorry, no documentation yet)
 
 I think this is the very basic functionality that is needed in order to focus
 to game logic.
