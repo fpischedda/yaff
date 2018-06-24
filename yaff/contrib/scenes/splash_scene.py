@@ -16,43 +16,39 @@ class SplashScene(Scene):
     be played in loop
     """
 
-    splash_image_path = 'res/images/splash.jpg'
+    splash_image_path = 'images/splash.jpg'
     next_scene_class = None
 
     def __init__(self, *args, **kwargs):
 
         try:
             self.splash_image_path = kwargs.pop('splash_image_path')
-        except:
+        except KeyError:
             pass
 
-        try:
-            self.next_scene_class = kwargs.pop('next_scene_class')
-        except:
-            pass
+        self.next_scene_class = kwargs.pop('next_scene_class',
+                                           self.next_scene_class)
 
-        try:
-            sound_loop_path = kwargs.pop('sound_file_path')
-            sound = pyglet.resource.media(sound_loop_path,
-                                          streaming=False)
-            player = pyglet.media.Player()
+        sound_loop_path = kwargs.pop('sound_file_path', None)
+        loop = kwargs.pop('sound_loop', False)
+        if sound_loop_path:
+            try:
+                sound = pyglet.resource.media(sound_loop_path, streaming=False)
+                player = pyglet.media.Player()
 
-            loop = kwargs.pop('sound_loop', False)
-            if loop:
-                looper = pyglet.media.SourceGroup(sound.audio_format, None)
-                looper.loop = True
-                looper.queue(sound)
-                player.queue(looper)
-            else:
-                player.queue(sound)
+                if loop:
+                    looper = pyglet.media.SourceGroup(sound.audio_format, None)
+                    looper.loop = True
+                    looper.queue(sound)
+                    player.queue(looper)
+                else:
+                    player.queue(sound)
 
-            player.play()
-            self.player = player
-        except KeyError as e:
-            pass
-        except Exception as e:
-            print('Sound loop exception: ', e)
-            self.player = None
+                player.play()
+                self.player = player
+            except Exception as e:
+                print('Sound loop exception: ', e)
+                self.player = None
 
         super(SplashScene, self).__init__(*args, **kwargs)
 
@@ -63,6 +59,5 @@ class SplashScene(Scene):
         return True
 
     def on_draw(self, window):
-
         super(SplashScene, self).on_draw(window)
         self.image.blit(0, 0)

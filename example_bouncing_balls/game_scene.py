@@ -17,20 +17,21 @@ def randomize_ball(boundaries, image, batch):
 
 
 class GameScene(Scene):
-
     def __init__(self, *args, **kwargs):
 
         super(GameScene, self).__init__(*args, **kwargs)
 
-        image = pyglet.resource.image('res/images/sprites/sprite.png')
+        image = pyglet.resource.image('images/sprites/sprite.png')
 
         self.boundaries = [0, 0, 640, 480]
 
         self.batch = pyglet.graphics.Batch()
-        self.balls = [randomize_ball(self.boundaries, image, self.batch)
-                      for _ in range(1000)]
+        self.balls = [
+            randomize_ball(self.boundaries, image, self.batch)
+            for _ in range(1000)
+        ]
 
-        self.background = pyglet.resource.image('res/images/bg/bg.jpg')
+        self.background = pyglet.resource.image('images/bg/bg.jpg')
 
     def on_key_press(self, symbol, modifier):
         if symbol == pyglet.window.key.M:
