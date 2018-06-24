@@ -5,7 +5,7 @@ from .game_scene import GameScene
 
 
 def create_startup_scene():
-    SplashScene(
+    return SplashScene(
         next_scene_class=GameScene,
         sound_file_path='sfx/example_loop.wav',
         sound_loop=True)
