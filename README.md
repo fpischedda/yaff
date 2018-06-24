@@ -36,6 +36,7 @@ In order to run the simplest example:
   requirements.txt
 - install yaff in the virtualenv with: python setup.py install
 - run: python -m example_bouncing_balls.main
+- alternative use the yaff runner: yaff run example_bouncing_balls
 
 The other projects included in the repo are usually broken and may require
 more work to run, for example pyweek20 requires more effort to run it.
