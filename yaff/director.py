@@ -2,7 +2,6 @@ import collections
 
 
 class Director:
-
     def __init__(self, window, startup_scene=None):
 
         self.window = window
@@ -80,8 +79,7 @@ class Director:
         current_scene = self.current_scene()
         if current_scene is not None and hasattr(current_scene,
                                                  'on_mouse_drag'):
-            current_scene.on_mouse_motion(x, y, dx, dy,
-                                          buttons, modifiers)
+            current_scene.on_mouse_motion(x, y, dx, dy, buttons, modifiers)
 
     def on_draw(self):
         current_scene = self.current_scene()
