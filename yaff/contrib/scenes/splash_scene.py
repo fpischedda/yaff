@@ -17,23 +17,24 @@ class SplashScene(Scene):
     """
 
     splash_image_path = 'images/splash.jpg'
+    sound_file_path = None
+    sound_loop = False
     next_scene_class = None
 
     def __init__(self, *args, **kwargs):
 
-        try:
-            self.splash_image_path = kwargs.pop('splash_image_path')
-        except KeyError:
-            pass
+        self.splash_image_path = kwargs.pop('splash_image_path',
+                                            self.splash_image_path)
 
         self.next_scene_class = kwargs.pop('next_scene_class',
                                            self.next_scene_class)
 
-        sound_loop_path = kwargs.pop('sound_file_path', None)
-        loop = kwargs.pop('sound_loop', False)
-        if sound_loop_path:
+        sound_file_path = kwargs.pop('sound_file_path',
+                                     self.sound_file_path)
+        loop = kwargs.pop('sound_loop', self.sound_loop)
+        if sound_file_path:
             try:
-                sound = pyglet.resource.media(sound_loop_path, streaming=False)
+                sound = pyglet.resource.media(sound_file_path, streaming=False)
                 player = pyglet.media.Player()
 
                 if loop:
@@ -44,7 +45,7 @@ class SplashScene(Scene):
                 else:
                     player.queue(sound)
 
-                player.play()
+                # player.play()
                 self.player = player
             except Exception as e:
                 print('Sound loop exception: ', e)
