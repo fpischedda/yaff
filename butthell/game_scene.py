@@ -35,6 +35,7 @@ class GameScene(Scene):
             'pickup': pyglet.resource.media(
                 'sfx/pickup.wav', streaming=False),
         }
+        self.bullets = []
 
     def setup_points(self):
         self.bitmap_font = BitmapFont('images/fonts/font.png', 5, 10)
@@ -54,7 +55,7 @@ class GameScene(Scene):
         player_animations = {
             'idle-right': {
                 'loader': 'grid',
-                'loader_params': {
+                'parameters': {
                     'path': 'images/sprites/idle-right.png',
                     'rows': 1,
                     'cols': 6
@@ -62,7 +63,7 @@ class GameScene(Scene):
             },
             'idle-left': {
                 'loader': 'grid',
-                'loader_params': {
+                'parameters': {
                     'path': 'images/sprites/idle-left.png',
                     'rows': 1,
                     'cols': 6
@@ -70,7 +71,7 @@ class GameScene(Scene):
             },
             'run-right': {
                 'loader': 'grid',
-                'loader_params': {
+                'parameters': {
                     'path': 'images/sprites/run-right.png',
                     'rows': 1,
                     'cols': 4
@@ -78,7 +79,7 @@ class GameScene(Scene):
             },
             'run-left': {
                 'loader': 'grid',
-                'loader_params': {
+                'parameters': {
                     'path': 'images/sprites/run-left.png',
                     'rows': 1,
                     'cols': 4

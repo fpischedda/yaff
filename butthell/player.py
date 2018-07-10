@@ -29,9 +29,9 @@ class Player(pyglet.sprite.Sprite):
 
         self.status = self.STATUS_ALIVE
         self.sounds = {
-            'jump': pyglet.resource.media('res/sfx/player_jump.wav',
+            'jump': pyglet.resource.media('sfx/player_jump.wav',
                                           streaming=False),
-            'die': pyglet.resource.media('res/sfx/player_died.wav',
+            'die': pyglet.resource.media('sfx/player_died.wav',
                                          streaming=False),
         }
 
