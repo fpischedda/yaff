@@ -12,7 +12,7 @@ class SplashScene(Scene):
     a key
     - sound_file_path: path to a suond file that will be played at the
     start of the scene
-    - sound_loop: defulat False; if set to True, the specified sound will
+    - sound_loop: default False; if set to True, the specified sound will
     be played in loop
     """
 
@@ -34,7 +34,8 @@ class SplashScene(Scene):
         loop = kwargs.pop('sound_loop', self.sound_loop)
         if sound_file_path:
             try:
-                sound = pyglet.resource.media(sound_file_path, streaming=False)
+                sound = pyglet.resource.media(sound_file_path,
+                                              streaming=not loop)
                 player = pyglet.media.Player()
 
                 if loop:
