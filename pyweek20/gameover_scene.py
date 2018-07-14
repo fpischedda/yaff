@@ -22,9 +22,8 @@ class GameOverScene(Scene):
             anchor_x='center',
             anchor_y='center')
 
-
     def on_key_press(self, symbol, modifier):
-        from game_scene import GameScene
+        from .game_scene import GameScene
         if symbol == pyglet.window.key.SPACE:
             self.director.prepare_next_scene(SplashScene,
                                              next_scene_class=GameScene)

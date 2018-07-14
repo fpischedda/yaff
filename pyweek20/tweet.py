@@ -2,7 +2,7 @@ import pyglet
 import random
 from yaff.contrib.mixins import LinearVelocityMixin
 from yaff.contrib.mixins import GravityMixin
-from yaff.conf import settings
+from . import settings
 
 
 class Tweet(GravityMixin,
@@ -57,7 +57,6 @@ class Tweet(GravityMixin,
         return True
 
     def bounding_box(self):
-
         return (self.x, self.y, self.x + self.width, self.y + self.height)
 
     def collide(self, bbox):

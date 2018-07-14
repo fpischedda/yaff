@@ -1,5 +1,5 @@
 import pyglet
-from yaff.conf import settings
+from . import settings
 
 
 class Player(pyglet.sprite.Sprite):
@@ -27,10 +27,10 @@ class Player(pyglet.sprite.Sprite):
 
         self.status = self.STATUS_ALIVE
         self.sounds = {
-            'jump': pyglet.media.load('res/sfx/player_jump.wav',
-                                      streaming=False),
-            'die': pyglet.media.load('res/sfx/player_died.wav',
-                                      streaming=False),
+            'jump': pyglet.resource.media('sfx/player_jump.wav',
+                                          streaming=False),
+            'die': pyglet.resource.media('sfx/player_died.wav',
+                                         streaming=False),
         }
 
     def set_image(self, image):
@@ -67,13 +67,13 @@ class Player(pyglet.sprite.Sprite):
 
         if direction_key == self.DIRECTION_UP and not self.jumping:
             self.jumping = True
-            self.direction[1] = 15
+            self.direction[1] = 5
             if self.direction[0] < 0:
                 self.set_animation('rolling-left')
             else:
                 self.set_animation('rolling-right')
 
-            self.sounds['jump'].play()
+            # self.sounds['jump'].play()
 
     def set_key_released(self, direction_key):
 
@@ -100,7 +100,7 @@ class Player(pyglet.sprite.Sprite):
             self.status = self.STATUS_DEAD
 
     def die(self):
-        self.sounds['die'].play()
+        # self.sounds['die'].play()
         self.status = self.STATUS_DYING
         self.direction[0] = 0
         self.direction[1] = 0
@@ -125,7 +125,7 @@ class Player(pyglet.sprite.Sprite):
             self.x = 640 - self.width
 
         if self.jumping:
-            self.direction[1] -= settings.GRAVITY / 4 * dt
+            self.direction[1] -= settings.GRAVITY * dt
 
         if self.jumping and self.y <= 0:
             self.y = 0

@@ -1,7 +1,6 @@
 import random
 import math
 import pyglet
-from yaff.conf import settings
 from yaff.scene import Scene
 from yaff.animation import load_animation
 from .tweet import Tweet
@@ -9,6 +8,7 @@ from .player import Player
 from .explosion import Explosion
 from .bitmap_font import BitmapFont
 from .gameover_scene import GameOverScene
+from . import settings
 from .utils import spawn_letters
 
 
@@ -45,13 +45,13 @@ class GameScene(Scene):
 
         super(GameScene, self).__init__(*args, **kwargs)
 
-        self.image = pyglet.resource.image('res/images/sprites/sprite.png')
+        self.image = pyglet.resource.image('images/sprites/sprite.png')
 
         self.tweet_timeout = 1.5
 
         self.boundaries = [0, 0, 640, 480]
 
-        self.bitmap_font = BitmapFont('res/images/fonts/font.png', 5, 10)
+        self.bitmap_font = BitmapFont('images/fonts/font.png', 5, 10)
         self.batch = pyglet.graphics.Batch()
         self.tweets = []
         self.letters = []
@@ -75,37 +75,37 @@ class GameScene(Scene):
             'idle-right': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/idle-right.png', 1, 6]
+                ['images/sprites/idle-right.png', 1, 6]
             },
             'idle-left': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/idle-left.png',
+                ['images/sprites/idle-left.png',
                  1, 6]},
             'run-right': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/run-right.png',
+                ['images/sprites/run-right.png',
                  1, 4]},
             'run-left': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/run-left.png',
+                ['images/sprites/run-left.png',
                  1, 4]},
             'rolling-right': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/rolling-right.png',
+                ['images/sprites/rolling-right.png',
                  1, 3]},
             'rolling-left': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/rolling-left.png',
+                ['images/sprites/rolling-left.png',
                  1, 3]},
             'dying': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/dying.png',
+                ['images/sprites/dying.png',
                  1, 9, 0.12]},
         })
 
@@ -117,26 +117,25 @@ class GameScene(Scene):
             'bird-right': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/bird-right.png',
+                ['images/sprites/bird-right.png',
                  1, 7]},
             'bird-left': {
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/bird-left.png',
+                ['images/sprites/bird-left.png',
                  1, 7]},
         })
-        self.background = pyglet.resource.image('res/images/bg/bg1.jpg')
+        self.background = pyglet.resource.image('images/bg/bg1.jpg')
 
         self.explosion_animation = load_animation({
                 'loader': 'grid',
                 'parameters':
-                ['res/images/sprites/explosion.png', 1, 6]})
+                ['images/sprites/explosion.png', 1, 6]})
 
         self.sounds = {
-            'pickup': pyglet.media.load('res/sfx/pickup.wav',
-                                        streaming=False),
+            'pickup': pyglet.resource.media('sfx/pickup.wav',
+                                            streaming=False),
         }
-
 
     def on_key_release(self, symbol, modifier):
 
@@ -195,8 +194,8 @@ class GameScene(Scene):
             c.die()
             self.new_points += settings.LETTER_POINTS
 
-        if len(collisions) > 0:
-            self.sounds['pickup'].play()
+        # if len(collisions) > 0:
+            # self.sounds['pickup'].play()
 
     def update_points_label(self):
 
@@ -207,10 +206,11 @@ class GameScene(Scene):
     def on_update(self, dt):
         self.tweet_timeout -= dt
         if self.tweet_timeout < 0:
-            self.tweet_timeout = 1.5
+            self.tweet_timeout = 1.5 + 1.5 * random.random()
             self.add_tweets()
-            for b in self.tweets:
-                b.on_update(dt)
+
+        for t in self.tweets:
+            t.on_update(dt)
         self.timeout_label.text = str(self.tweet_timeout)
 
         if self.player.is_alive():
