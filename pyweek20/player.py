@@ -67,7 +67,7 @@ class Player(pyglet.sprite.Sprite):
 
         if direction_key == self.DIRECTION_UP and not self.jumping:
             self.jumping = True
-            self.direction[1] = 5
+            self.direction[1] = 2
             if self.direction[0] < 0:
                 self.set_animation('rolling-left')
             else:
