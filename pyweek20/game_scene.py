@@ -43,7 +43,7 @@ class GameScene(Scene):
 
     def __init__(self, *args, **kwargs):
 
-        super(GameScene, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.image = pyglet.resource.image('images/sprites/sprite.png')
 
@@ -211,7 +211,7 @@ class GameScene(Scene):
 
         for t in self.tweets:
             t.on_update(dt)
-        self.timeout_label.text = str(self.tweet_timeout)
+        self.timeout_label.text = f'{self.tweet_timeout:.2f}'
 
         if self.player.is_alive():
             self.check_letter_collisions()
@@ -228,7 +228,7 @@ class GameScene(Scene):
 
     def on_draw(self, window):
 
-        super(GameScene, self).on_draw(window)
+        super().on_draw(window)
 
         bg_x = -self.player.x
         bg_y = -self.player.y

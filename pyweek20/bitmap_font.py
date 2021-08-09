@@ -9,10 +9,11 @@ class BitmapFont:
     def __init__(self, image_path, width, height, font_map=default_map):
         image = pyglet.resource.image(image_path)
         self.grid = pyglet.image.ImageGrid(image, 1, image.width//width)
-        pyglet.gl.glTexParameteri(self.grid.texture.target,
+        texture = self.grid.get_texture()
+        pyglet.gl.glTexParameteri(texture.target,
                                   pyglet.gl.GL_TEXTURE_MAG_FILTER,
                                   pyglet.gl.GL_NEAREST)
-        pyglet.gl.glTexParameteri(self.grid.texture.target,
+        pyglet.gl.glTexParameteri(texture.target,
                                   pyglet.gl.GL_TEXTURE_MIN_FILTER,
                                   pyglet.gl.GL_NEAREST)
         self.width = width

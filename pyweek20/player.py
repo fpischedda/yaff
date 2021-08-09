@@ -14,10 +14,9 @@ class Player(pyglet.sprite.Sprite):
 
     def __init__(self, start_x, start_y, animations, *args, **kwargs):
 
-        super(Player, self).__init__(*args, **kwargs)
+        super().__init__(x=start_x, y=start_y, *args, **kwargs)
 
         self.animations = animations
-        self.set_position(start_x, start_y)
 
         self.direction = [0, 0]
         self.key_pressed = 0
