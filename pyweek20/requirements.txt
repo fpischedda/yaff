@@ -4,5 +4,5 @@ ordereddict==1.1
 pika==0.10.0
 pyglet==1.2.4
 python-dotenv==0.4.0
-ujson==1.35
+ujson==5.2.0
 yaff==0.1.0
